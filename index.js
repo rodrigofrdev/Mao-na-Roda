@@ -1,6 +1,7 @@
+import dotenv from 'dotenv';  // Importando o dotenv
+dotenv.config();  // Carregando as variáveis do arquivo .env
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import authRoutes from './routes/authRoutes.js';
 import checkAuth from './middlewares/authMiddleware.js';
@@ -9,9 +10,6 @@ const app = express(); // Inicializando o express
 
 // Configurando o servidor
 const PORT = process.env.PORT || 5000; // Defina a porta para o servidor
-
-// Carregar variáveis do arquivo .env
-dotenv.config();
 
 // Middleware para permitir o CORS (Cross-Origin Resource Sharing)
 app.use(cors());
