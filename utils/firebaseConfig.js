@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import dotenv from 'dotenv';  // Importando o dotenv
+import dotenv from 'dotenv';
+
 dotenv.config();  // Carregando as variáveis do arquivo .env
 
 // Configuração do Firebase para sua aplicação web
