@@ -1,60 +1,41 @@
-const express = require('express');
-const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
-const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import bodyParser from 'body-parser';
+import authRoutes from './routes/authRoutes.js';
+import checkAuth from './middlewares/authMiddleware.js';
 
-// Carregar a chave da conta de serviço
-const serviceAccount = require('./config/serviceAccountKey.json');
+const app = express(); // Inicializando o express
 
-// Inicializar o Firebase Admin SDK com as credenciais
-initializeApp({
-  credential: cert(serviceAccount)  // Usando a chave da conta de serviço
+// Configurando o servidor
+const PORT = process.env.PORT || 5000; // Defina a porta para o servidor
+
+// Carregar variáveis do arquivo .env
+dotenv.config();
+
+// Middleware para permitir o CORS (Cross-Origin Resource Sharing)
+app.use(cors());
+
+// Middleware para lidar com requisições JSON e dados no corpo das requisições
+app.use(bodyParser.json());
+
+// Usando as rotas de autenticação
+app.use('/auth', authRoutes);
+
+// Definindo a rota de exemplo que exige autenticação
+app.get('/profile', checkAuth, (req, res) => {
+  console.log("User: ", req.user || "No user");
+  res.status(200).json({ message: 'Bem-vindo ao seu perfil!', user: req.user });
 });
 
-// Obter referência ao Firestore
-const db = getFirestore();
-
-// Criar a aplicação Express
-const app = express();
-// Habilitar o uso de JSON no corpo das requisições
-app.use(express.json());
-
-// Definir um endpoint de exemplo
-app.get('/', (req, res) => {
-  res.send('Hello, Firebase!');
+// Rota de exemplo para testar o middleware de autenticação
+app.post('/secure-data', checkAuth, (req, res) => {
+  console.log("User: ", req.user || "No user");
+  // Aqui você pode adicionar qualquer lógica para dados que precisem de autenticação
+  res.status(200).json({ message: 'Dados seguros recebidos', data: req.body });
 });
 
-// Exemplo de endpoint para adicionar dados ao Firestore
-app.get('/adicionar', async (req, res) => {
-  try {
-    // Adicionando dados no Firestore na coleção 'reparo-automotivo'
-    const docRef = await db.collection('reparo-automotivo').add({
-      nome: 'Usuário de teste',
-      idade: 30,
-    });
-
-    res.status(201).json({ message: 'Usuário adicionado com sucesso!', id: docRef.id });
-  } catch (error) {
-    res.status(500).json({ error: 'Erro ao adicionar usuário', details: error });
-  }
-});
-
-app.get('/listar', async (req, res) => {
-  try {
-    // Listando todos os documentos da coleção 'reparo-automotivo'
-    const querySnapshot = await db.collection('reparo-automotivo').get();
-    const users = [];
-    querySnapshot.forEach((doc) => {
-      users.push({ id: doc.id, ...doc.data() });
-    });
-
-    res.status(200).json(users);
-  } catch (error) {
-    res.status(500).json({ error: 'Erro ao listar usuários', details: error });
-  }
-});
-
-// Definir a porta do servidor
-const port = 5000;
-app.listen(port, () => {
-  console.log(`Servidor rodando na porta ${port}`);
+// Iniciando o servidor
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
 });
