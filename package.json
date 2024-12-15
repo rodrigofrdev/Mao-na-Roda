@@ -1,0 +1,19 @@
+{
+  "name": "plataforma-de-reparo-automotivo",
+  "version": "1.0.0",
+  "description": "App - Plataforma de reparo automotivo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "Rodrigo Ferreira Rodrigues",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "firebase": "^11.0.2",
+    "firebase-admin": "^13.0.1",
+    "firebase-functions": "^6.1.2"
+  }
+}
