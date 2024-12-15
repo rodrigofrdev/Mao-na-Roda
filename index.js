@@ -1,5 +1,3 @@
-import dotenv from 'dotenv';  // Importando o dotenv
-dotenv.config();  // Carregando as variáveis do arquivo .env
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
