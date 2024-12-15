@@ -3,3 +3,13 @@
 
 # Ignorar a pasta node_modules
 node_modules/
+
+# Ignorar arquivos de log
+*.log
+
+# Ignorar arquivos de configuração de IDEs, como VSCode
+.vscode/
+
+# Ignorar arquivos de sistema
+.DS_Store  # Para macOS
+Thumbs.db  # Para Windows
